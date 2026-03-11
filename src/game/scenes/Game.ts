@@ -5,6 +5,8 @@ export class Game extends Scene
 {
     keys: any
     player: Player
+    platform: any
+    movingPlatform: any
 
     constructor ()
     {
@@ -16,9 +18,12 @@ export class Game extends Scene
         this.load.setPath('src/game/assets');
         
         this.load.image('background', 'default_background.png');
-        this.load.image('character', 'character_redux.png');
-        this.load.image('police', 'police.png')
-        this.load.image('tux', 'tux_pixel.png')
+        this.load.image('platform', 'platform.png')
+
+        this.load.spritesheet('player', 'Warrior_Idle.png', {
+            frameWidth: 192,
+            frameHeight: 192
+        })
     }
 
     create ()
@@ -29,8 +34,34 @@ export class Game extends Scene
         
         this.add.image(1024 / 2, 1024 / 2, 'background')
 
-        this.player = new Player(this, 0, 1024, 'character')
-        
+        this.anims.create({
+            key: 'walk',
+            frames: this.anims.generateFrameNumbers('player', { frames: [0, 1, 2, 3, 4, 5, 7]}),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.player = new Player(this, 0, 900, 'player')
+
+
+        this.player.body?.setSize(92, 72);
+
+        this.platform = this.physics.add.staticGroup()
+
+        this.platform.create(1024 / 2, 1024, 'platform').setScale(2.1).refreshBody();
+
+
+
+
+        this.movingPlatform = this.physics.add.image(500, 700, 'platform');
+        this.movingPlatform.setImmovable(true);
+        this.movingPlatform.body.allowGravity = false;
+        this.movingPlatform.setVelocityX(50);
+
+        this.physics.add.collider(this.player, this.platform)
+        this.physics.add.collider(this.player, this.movingPlatform)
+
+
     }
 
     update ()
@@ -49,5 +80,15 @@ export class Game extends Scene
         // else if (this.keys.down.isDown) {
         //     this.player.setVelocityY(300)
         // }
+
+
+        if (this.movingPlatform.x >= 700)
+        {
+            this.movingPlatform.setVelocityX(-50);
+        }
+        else if (this.movingPlatform.x <= 400)
+        {
+            this.movingPlatform.setVelocityX(50);
+        }
     }
 }

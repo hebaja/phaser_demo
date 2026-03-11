@@ -12,6 +12,9 @@ const config: Types.Core.GameConfig = {
     pixelArt: true,
     physics: {
         default: 'arcade',
+        arcade: {
+            debug: true
+        }
     },
     scale: {
         mode: Scale.FIT,
