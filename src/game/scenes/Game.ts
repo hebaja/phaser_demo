@@ -60,7 +60,7 @@ export class Game extends Scene
     {
         this.keys = this.input.keyboard?.createCursorKeys()
         this.physics.world.gravity.y = 75
-        this.physics.world.setBounds(0, 0, 3072, 1024)
+        this.physics.world.setBounds(0, 0, 3072, 124)
         for (let x = 0; x < 3; x++) {
             this.add.image(512 * (x + (x + 1)) , 1024 / 2, 'background')
         }
